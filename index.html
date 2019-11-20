@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>relative-time</title>
+    <style>
+      #app {
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #2c3e50;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <ul id="list">
+        <!-- <li><relative-time><time datetime="2019-11-19T08:58:52+01:00">2019-11-19T08:58</time></relative-time></li>-->
+      </ul>
+    </div>
+  </body>
+  <script src="relative-time-element.js"></script>
+  <script>
+
+    var add = 0;
+    var list = document.getElementById('list');
+    for (let i = 0; i < 20; i++) {
+      var d = new Date();
+      add += 60 + (i*(i)*75);
+      d.setSeconds(d.getSeconds() - add);
+      var li = document.createElement('li');
+      var rt = document.createElement('relative-time');
+      li.appendChild(rt);
+      var t = document.createElement('time');
+      t.setAttribute('datetime', d.toISOString());
+      rt.appendChild(t);
+      var text = document.createTextNode('blabla');
+      t.appendChild(text);
+      list.appendChild(li);
+    }
+
+  </script>
+
+</html>
