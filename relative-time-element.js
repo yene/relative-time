@@ -2,16 +2,26 @@
 // Wrap `<time>` in `<relative-time>` element.
 // <relative-time><time datetime="2019-11-19T08:58:52+01:00">2019-11-19T08:58</time></relative-time>
 function relativeTime() {
-  if ('registerElement' in document) {
-    var rtProto = Object.create(HTMLElement.prototype);
-    rtProto.attachedCallback = function() {
-      var time = this.querySelector('time')
-      var datetime = time.getAttribute('datetime'); // datetime has to be a RFC 3339 string
-      time.textContent = relativeDateString(datetime);
-    };
-
-    document.registerElement('relative-time', {prototype: rtProto});
+  if ('customElements' in window) {
+    window.customElements.define('relative-time',
+      class extends HTMLElement {
+        connectedCallback() {
+          var time = this.querySelector('time');
+          if (time === null) {return;}
+          var datetime = time.getAttribute('datetime');
+          time.textContent = relativeDateString(datetime);
+        }
+      }
+    );
     return;
+  }
+  // Fallback for IE, Edge
+  var rt = document.querySelectorAll('relative-time');
+  for (var i = 0; i < rt.length; i++) {
+    var time = rt[i].querySelector('time')
+    if (time === null) {continue;}
+    var datetime = time.getAttribute('datetime');
+    time.textContent = relativeDateString(datetime);
   }
 }
 relativeTime();
